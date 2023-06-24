@@ -12,6 +12,6 @@ class PitchingStats extends Model
         return $this->team . ',' .$this->name . ',' . $this->ip;
     }
     public function find(){
-        
+        echo 'aaa';
     }
 }
