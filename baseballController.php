@@ -356,4 +356,13 @@ class baseballController extends Controller
     $items=PitchingStats::all();
     return view('baseball_model',['items'=>$items]);
   }
+
+  public function find(Request $request){
+    return view('baseball_find',['input'=>'']);
+  }
+  public function search(Request $request){
+    $item=PitchingStats::find($request->input);
+    $param=['input'=>$request->input,'item'=>$item];
+    return view('baseball_find',$param);
+  }
 }
