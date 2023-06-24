@@ -13,5 +13,6 @@ class PitchingStats extends Model
     }
     public function find(){
         echo 'aaa';
+        
     }
 }
