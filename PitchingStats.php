@@ -15,4 +15,11 @@ class PitchingStats extends Model
     public function scopeNameEqual($query,$str){
         return $query->where('name',$str);
     }
+    
+    public function scopeInningGreaterThan($query,$n){
+        return $query->where('ip','>=',$n);
+    }
+    public function scopeInningLessThan($query,$n){
+        return $query->where('ip','<=',$n);
+    }
 }
