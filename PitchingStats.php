@@ -11,4 +11,7 @@ class PitchingStats extends Model
     public function getData(){
         return $this->team . ',' .$this->name . ',' . $this->ip;
     }
+    public function find(){
+        
+    }
 }
