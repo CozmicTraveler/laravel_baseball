@@ -10,7 +10,24 @@ use App\Scopes\ScopePitchingStats;
 class PitchingStats extends Model
 {
     use HasFactory;
+    //Input guard
+    protected $guarded=array('id');
 
+    //Define validation rules
+    public static $rules = array(
+        'team'=>'required',
+        'name'=>'required',
+        'ip'=>'numeric',
+        'game'=>'integer',
+        'batter'=>'integer',
+        'ip'=>'integer',
+        'hit'=>'integer',
+        'hr'=>'integer',
+        'bb'=>'integer',
+        'ib'=>'integer',
+        'db'=>'integer',
+        'so'=>'integer',
+    );
     protected static function boot(){
         parent::boot();
         static::addGlobalScope(new ScopePitchingStats);
