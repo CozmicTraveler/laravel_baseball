@@ -365,4 +365,5 @@ class baseballController extends Controller
     $param=['input'=>$request->input,'item'=>$item];
     return view('baseball_find',$param);
   }
+  
 }
