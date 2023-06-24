@@ -362,7 +362,8 @@ class baseballController extends Controller
   }
   public function search(Request $request){
     // $item=PitchingStats::find($request->input);
-    $item=PitchingStats::where('name',$request->input)->first();
+    // $item=PitchingStats::where('name',$request->input)->first();
+    $item=PitchingStats::nameEqual($request->input)->first();
     $param=['input'=>$request->input,'item'=>$item];
     return view('baseball_find',$param);
   }
