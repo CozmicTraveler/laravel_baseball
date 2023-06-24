@@ -11,8 +11,8 @@ class PitchingStats extends Model
     public function getData(){
         return $this->team . ',' .$this->name . ',' . $this->ip;
     }
-    public function find(){
-        echo 'aaa';
-        
+
+    public function scopeNameEqual($query,$str){
+        return $query->where('name',$str);
     }
 }
