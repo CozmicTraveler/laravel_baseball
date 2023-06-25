@@ -20,88 +20,101 @@ class baseballController extends Controller
     }
 
     public function add(Request $request){
-        return view('baseball_add');
+        return view('pitching_add');
     }
 
+    // Without using model
     // public function create(Request $request)
     // {
+    //   $team=$request->team;
+    //   $name=$request->name;
+    //   $game=$request->game;
+    //   $batter=$request->batter;
+    //   $ip=$request->ip;
+    //   $hit=$request->hit;
+    //   $hr=$request->hr;
+    //   $bb=$request->bb;
+    //   $ib=$request->ib;
+    //   $db=$request->db;
+    //   $so=$request->so;
+    //   $wild=$request->wild;
     //   //Calicurating FIP
-    //   $ip=$request->IP;
-    //   $so=$request->SO;
-    //   $bb=$request->BB;
-    //   $db=$request->DB;
-    //   $hr=$request->HR;
     //   $fip=((($bb*3+$hr*13)-($so*2))/$ip)+3.12;
+    //   $hr9=($hr/$ip)*9;
+    //   $bb9=($bb/$ip)*9;
+    //   $k9=($so/$ip)*9;
+    //   // babip(without considering sacrifice.)
+    //   $babip=($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr);
+
     //   //Autoincriment
     //   $playerID=null;
     //   //Designating parameters
     //   $param=[
-    //     'playerID'=>$playerID,
-    //     'lastname'=>$request->lastname,
-    //     'firstname'=>$request->firstname,
+    //     'id'=>$playerID,
+    //     'team'=>$team,
+    //     'name'=>$name,
     //     'ip'=>$ip,
-    //     'so'=>$so,
-    //     'bb'=>$bb,
-    //     'db'=>$db,
+    //     'game'=>$game,
+    //     'batter'=>$batter,
+    //     'ip'=>$ip,
+    //     'hit'=>$hit,
     //     'hr'=>$hr,
-    //     'fip'=>$fip
+    //     'bb'=>$bb,
+    //     'ib'=>$ib,
+    //     'db'=>$db,
+    //     'so'=>$so,
+    //     'fip'=>$fip,
+    //     'hr9'=>$hr9,
+    //     'bb9'=>$bb9,
+    //     'k9'=>$k9,
+    //     'wild'=>$wild,
+    //     'babip'=>$babip,
     //   ];
     //   //Inserting new record.
-    //   DB::insert('INSERT INTO pitcher_stats(playerID, lastname, firstname, ip, so, bb, db, hr, fip) VALUES
-    //   (:playerID,:lastname,:firstname,:ip,:so,:bb,:db,:hr,:fip)',$param);
+    //   DB::table('pitching_stats')->insert($param);
     //   return redirect('baseball');
     // }
 
-    public function create(Request $request)
-    {
-      $team=$request->team;
-      $name=$request->name;
-      $game=$request->game;
-      $batter=$request->batter;
-      $ip=$request->ip;
-      $hit=$request->hit;
-      $hr=$request->hr;
-      $bb=$request->bb;
-      $ib=$request->ib;
-      $db=$request->db;
-      $so=$request->so;
-      $wild=$request->wild;
-      //Calicurating FIP
-      $fip=((($bb*3+$hr*13)-($so*2))/$ip)+3.12;
-      $hr9=($hr/$ip)*9;
-      $bb9=($bb/$ip)*9;
-      $k9=($so/$ip)*9;
-      // babip(without considering sacrifice.)
-      $babip=($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr);
-
-      //Autoincriment
-      $playerID=null;
-      //Designating parameters
-      $param=[
-        'id'=>$playerID,
-        'team'=>$team,
-        'name'=>$name,
-        'ip'=>$ip,
-        'game'=>$game,
-        'batter'=>$batter,
-        'ip'=>$ip,
-        'hit'=>$hit,
-        'hr'=>$hr,
-        'bb'=>$bb,
-        'ib'=>$ib,
-        'db'=>$db,
-        'so'=>$so,
-        'fip'=>$fip,
-        'hr9'=>$hr9,
-        'bb9'=>$bb9,
-        'k9'=>$k9,
-        'wild'=>$wild,
-        'babip'=>$babip,
-      ];
-      //Inserting new record.
-      DB::table('pitching_stats')->insert($param);
-      return redirect('baseball');
-    }
+      public function create(Request $request){
+        $this->validate($request,PitchingStats::$rules);
+        $PitchingStats=new PitchingStats;
+        // $form=$request->all();
+        // unset($form['_token']);
+        
+        // define varriants to compute
+        $batter=$request->batter;
+        $ip=$request->ip;
+        $hit=$request->hit;
+        $hr=$request->hr;
+        $bb=$request->bb;
+        $ib=$request->ib;
+        $db=$request->db;
+        $so=$request->so;
+        
+        // set values to instance
+        $PitchingStats->team=$request->team;
+        $PitchingStats->name=$request->name;
+        $PitchingStats->game=$request->game;
+        $PitchingStats->batter=$request->batter;
+        $PitchingStats->ip=$request->ip;
+        $PitchingStats->hit=$request->hit;
+        $PitchingStats->hr=$request->hr;
+        $PitchingStats->bb=$request->bb;
+        $PitchingStats->ib=$request->ib;
+        $PitchingStats->db=$request->db;
+        $PitchingStats->so=$request->so;
+        $PitchingStats->wild=$request->wild;
+        $PitchingStats->fip=((($bb*3+$hr*13)-($so*2))/$ip)+3.12;
+        $PitchingStats->hr9=($hr/$ip)*9;
+        $PitchingStats->bb9=($bb/$ip)*9;
+        $PitchingStats->k9=($so/$ip)*9;
+        
+        // babip(without considering sacrifice(cuz there is no data of sacrifice).)
+        $PitchingStats->babip=($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr);
+        // $PitchingStats->fill($form)->save();
+        $PitchingStats->save();
+        return redirect('baseball');
+      }
 
     public function edit(Request $request){
       if($request->playerID!==null){
