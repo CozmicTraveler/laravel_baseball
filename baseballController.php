@@ -383,5 +383,12 @@ class baseballController extends Controller
     $param=['input'=>$request->input,'item'=>$item];
     return view('baseball_find',$param);
   }
-
+  
+  public function joinProfileStats(){
+    $items=DB::table('pitching_stats')
+    // The join method create inner join
+    ->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    ->select('pitching_stats.*','pitcher_profile.*')->get();
+    return view('baseball_join',['items'=>$items]);
+  }
 }
