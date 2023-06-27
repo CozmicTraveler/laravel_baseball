@@ -15,7 +15,10 @@ class baseballController extends Controller
 
     //Using query builder
     public function index(Request $request){
-        $items=DB::table('pitching_stats')->get();
+      $pitching_stats=new PitchingStats;  
+      // $items=$pitching_stats->get();
+      // top 10 player
+      $items=$pitching_stats->orderby('fip')->take(10)->get();
         return view('baseball',['items'=>$items]);
     }
 
