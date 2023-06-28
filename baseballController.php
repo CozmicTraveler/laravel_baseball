@@ -19,7 +19,7 @@ class baseballController extends Controller
       // $items=$pitching_stats->get();
       // top 10 player
       $items=$pitching_stats->orderby('fip')->take(10)->get();
-        return view('baseball',['items'=>$items]);
+      return view('baseball',['items'=>$items]);
     }
 
     public function add(Request $request){
@@ -233,52 +233,65 @@ class baseballController extends Controller
       );
       //各行を処理する
       foreach ($file as $line) {
-        //team	name	games	batter	IP	hit	hr	bb	ib	db	so	wild
-        $team=$line[0];
-        $name=$line[1];
-        $game=$line[2];
-        $batter=$line[3];
-        $ip=$line[4];
-        $hit=$line[5];
-        $hr=$line[6];
-        $bb=$line[7];
-        $ib=$line[8];
-        $db=$line[9];
-        $so=$line[10];
-        $wild=$line[11];
-        //Calicurating FIP
-        $fip=round(((($bb*3+$hr*13)-($so*2))/$ip)+3.12,2);
-        $hr9=round(($hr/$ip)*9,2);
-        $bb9=round(($bb/$ip)*9,2);
-        $k9=round(($so/$ip)*9,2);
-        // babip(without considering sacrifice.)
-        $babip=round(($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr),3);
+      //   //team	name	games	batter	IP	hit	hr	bb	ib	db	so	wild
+      //   $team=$line[0];
+      //   $name=$line[1];
+      //   $game=$line[2];
+      //   $batter=$line[3];
+      //   $ip=$line[4];
+      //   $hit=$line[5];
+      //   $hr=$line[6];
+      //   $bb=$line[7];
+      //   $ib=$line[8];
+      //   $db=$line[9];
+      //   $so=$line[10];
+      //   $wild=$line[11];
+      //   //Calicurating FIP
+      //   $fip=round(((($bb*3+$hr*13)-($so*2))/$ip)+3.12,2);
+      //   $hr9=round(($hr/$ip)*9,2);
+      //   $bb9=round(($bb/$ip)*9,2);
+      //   $k9=round(($so/$ip)*9,2);
+      //   // babip(without considering sacrifice.)
+      //   $babip=round(($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr),3);
         //Autoincriment
-        $playerID=null;
+        // $playerID=null;
         //Designating parameters
+        // $param=[
+        //   'id'=>$playerID,
+        //   'team'=>$team,
+        //   'name'=>$name,
+        //   'ip'=>$ip,
+        //   'game'=>$game,
+        //   'batter'=>$batter,
+        //   'ip'=>$ip,
+        //   'hit'=>$hit,
+        //   'hr'=>$hr,
+        //   'bb'=>$bb,
+        //   'ib'=>$ib,
+        //   'db'=>$db,
+        //   'so'=>$so,
+        //   'fip'=>$fip,
+        //   'hr9'=>$hr9,
+        //   'bb9'=>$bb9,
+        //   'k9'=>$k9,
+        //   'wild'=>$wild,
+        //   'babip'=>$babip,
+        // ];
         $param=[
-          'id'=>$playerID,
-          'team'=>$team,
-          'name'=>$name,
-          'ip'=>$ip,
-          'game'=>$game,
-          'batter'=>$batter,
-          'ip'=>$ip,
-          'hit'=>$hit,
-          'hr'=>$hr,
-          'bb'=>$bb,
-          'ib'=>$ib,
-          'db'=>$db,
-          'so'=>$so,
-          'fip'=>$fip,
-          'hr9'=>$hr9,
-          'bb9'=>$bb9,
-          'k9'=>$k9,
-          'wild'=>$wild,
-          'babip'=>$babip,
+          'name'=>$line[0],
+          'birth_date'=>$line[1],
+          'birth_place'=>$line[2],
+          'height'=>$line[3],
+          'weight'=>$line[4],
+          'blood_type'=>$line[5],
+          'pithc_rl'=>$line[6],
+          'bat_rl'=>$line[7],
+          'draft_year'=>$line[8],
+          'draft_rank'=>$line[9],
+          'career'=>$line[10],
         ];
         //Inserting new record.
-        DB::table('pitching_stats')->insert($param);
+        DB::table('pitcher_profile')->insert($param);
         // // 一時ファイルを削除する
         // unlink($filepath);
       }
@@ -301,7 +314,6 @@ class baseballController extends Controller
     // public_path() publicの場所を表示
     $filepath = public_path() . "/tmp/" . $tmp;
 
-    // CSV取得
     // Declaring file object
     $file = new \SplFileObject($filepath);
     $file->setFlags(
@@ -316,56 +328,75 @@ class baseballController extends Controller
     );
     //processing read csv datas
     foreach($file as $line){
-      //team	name	games	batter	IP	hit	hr	bb	ib	db	so	wild
-      $team=$line[0];
-      $name=$line[1];
-      $game=$line[2];
-      $batter=$line[3];
-      $ip=$line[4];
-      $hit=$line[5];
-      $hr=$line[6];
-      $bb=$line[7];
-      $ib=$line[8];
-      $db=$line[9];
-      $so=$line[10];
-      $wild=$line[11];
-      //Calicurating FIP
-      $fip=round(((($bb*3+$hr*13)-($so*2))/$ip)+3.12,2);
-      $hr9=round(($hr/$ip)*9,2);
-      $bb9=round(($bb/$ip)*9,2);
-      $k9=round(($so/$ip)*9,2);
-      // babip(without considering sacrifice.)
-      $babip=round(($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr),3);
-      //Autoincriment
-      $playerID=null;
-      //Designating parameters
+      // //team	name	games	batter	IP	hit	hr	bb	ib	db	so	wild
+      // $team=$line[0];
+      // $name=$line[1];
+      // $game=$line[2];
+      // $batter=$line[3];
+      // $ip=$line[4];
+      // $hit=$line[5];
+      // $hr=$line[6];
+      // $bb=$line[7];
+      // $ib=$line[8];
+      // $db=$line[9];
+      // $so=$line[10];
+      // $wild=$line[11];
+      // //Calicurating FIP
+      // $fip=round(((($bb*3+$hr*13)-($so*2))/$ip)+3.12,2);
+      // $hr9=round(($hr/$ip)*9,2);
+      // $bb9=round(($bb/$ip)*9,2);
+      // $k9=round(($so/$ip)*9,2);
+      // // babip(without considering sacrifice.)
+      // $babip=round(($hit-$hr)/(($batter-$bb-$ib-$db)-$so-$hr),3);
+      // //Autoincriment
+      // $playerID=null;
+      // //Designating parameters
+      // $param=[
+      //   'id'=>$playerID,
+      //   'team'=>$team,
+      //   'name'=>$name,
+      //   'ip'=>$ip,
+      //   'game'=>$game,
+      //   'batter'=>$batter,
+      //   'ip'=>$ip,
+      //   'hit'=>$hit,
+      //   'hr'=>$hr,
+      //   'bb'=>$bb,
+      //   'ib'=>$ib,
+      //   'db'=>$db,
+      //   'so'=>$so,
+      //   'fip'=>$fip,
+      //   'hr9'=>$hr9,
+      //   'bb9'=>$bb9,
+      //   'k9'=>$k9,
+      //   'wild'=>$wild,
+      //   'babip'=>$babip,
+      // ];
       $param=[
-        'id'=>$playerID,
-        'team'=>$team,
-        'name'=>$name,
-        'ip'=>$ip,
-        'game'=>$game,
-        'batter'=>$batter,
-        'ip'=>$ip,
-        'hit'=>$hit,
-        'hr'=>$hr,
-        'bb'=>$bb,
-        'ib'=>$ib,
-        'db'=>$db,
-        'so'=>$so,
-        'fip'=>$fip,
-        'hr9'=>$hr9,
-        'bb9'=>$bb9,
-        'k9'=>$k9,
-        'wild'=>$wild,
-        'babip'=>$babip,
+        'name'=>$line[0],
+        'birth_place'=>$line[1],
+        'birth_date'=>$line[2],
+        'height'=>$line[3],
+        'weight'=>$line[4],
+        'blood_type'=>$line[5],
+        'pitch_rl'=>$line[6],
+        'bat_rl'=>$line[7],
+        'draft_year'=>(empty($line[8])) ?  0 : $line[8],
+        'draft_rank'=>(empty($line[9])) ? 'none' : $line[9],
+        'career'=>$line[10],
       ];
-      //Inserting new record.
-      DB::table('pitching_stats')->insert($param);
-      // // deleteing temp file
-      // unlink($filepath); // Permittion denied error
+      try{
+        DB::beginTransaction();
+        //Inserting new record.
+        DB::table('pitcher_profile')->insert($param);
+        // // deleteing temp file
+        // unlink($filepath); // Permittion denied error
+        DB::commit();
+      }catch(\Exception $e){
+        DB::rollBack();
+      }
     }
-    return redirect('baseball');
+    return redirect('baseball_join');
   }
 
   public function model(Request $request){
