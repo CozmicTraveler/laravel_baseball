@@ -182,9 +182,12 @@ class baseballController extends Controller
     }
 
     public function show(Request $request){
-      $playerID=$request->playerID;
-      $item=DB::table('pitcher_stats')->where('playerID',$playerID)->first();
-      return view('baseball_show',['item'=>$item]);
+      // $playerID=$request->playerID;
+      // $item=DB::table('pitcher_stats')->where('playerID',$playerID)->first();
+      $PitchingStats=new PitchingStats;
+      $items=$PitchingStats::findOrFail($request->id);
+      return view('baseball_show',['item'=>$items]);
+      // return view('baseball_show')->with('item',$PitchingStats::findOrFail($request->id));
     }
     public function showSearch(Request $request){
       $condition=$request->condition;
@@ -422,7 +425,13 @@ class baseballController extends Controller
     $items=DB::table('pitching_stats')
     // The join method create inner join
     ->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
-    ->select('pitching_stats.*','pitcher_profile.*')->get();
-    return view('baseball_join',['items'=>$items]);
+    // ->select('pitching_stats.*','pitcher_profile.*')->get();
+    // Left hand pitcher only
+    ->select('pitching_stats.*','pitcher_profile.*')->where('pitch_rl','左')->get();
+    $count=DB::table('pitching_stats')
+    // count lert hand pitchers
+    ->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    ->select('pitching_stats.*','pitcher_profile.*')->where('pitch_rl','左')->count();
+    return view('baseball_join',['items'=>$items,'count'=>$count]);
   }
 }
