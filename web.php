@@ -107,6 +107,7 @@ Route::post('baseball_csvupload','App\http\Controllers\baseballController@csvUpl
 Route::get('baseball_model','App\http\Controllers\baseballController@model');
 Route::get('baseball/find','App\http\Controllers\baseballController@find');
 Route::post('baseball/find','App\http\Controllers\baseballController@search');
+Route::get('baseball_join','App\http\Controllers\baseballController@joinProfileStats');
 
 //Delete certain record from table.
 Route::get('baseball_del','App\http\Controllers\baseballController@del');
@@ -117,6 +118,8 @@ Route::get('baseball/showSearch','App\http\Controllers\baseballController@showSe
 Route::get('baseball/showBetween','App\http\Controllers\baseballController@showBetween');
 Route::get('baseball/order','App\http\Controllers\baseballController@indexOrder');
 Route::get('baseball/offlim','App\http\Controllers\baseballController@showOffLim');
+Route::get('pitcher/search','App\http\Controllers\baseballController@pitchingSearch');
+Route::post('pitcher/search','App\http\Controllers\baseballController@searchPitcher');
 
 Route::get('person','App\http\Controllers\PersonController@index');
 
