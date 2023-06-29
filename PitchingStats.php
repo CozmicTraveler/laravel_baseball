@@ -31,7 +31,7 @@ class PitchingStats extends Model
     );
     protected static function boot(){
         parent::boot();
-        static::addGlobalScope(new ScopePitchingStats);
+        // static::addGlobalScope(new ScopePitchingStats);
         // static::addGlobalScope('ip',function(Builder $builder){
         //     $builder->where('ip','>=',30);
         // });
@@ -53,5 +53,8 @@ class PitchingStats extends Model
     }
     public function scopeGreatPlayer($query){
         return $query->where('fip','<=','3.00')->get();
+    }
+    public function scopeSelectFip($query,$fip){
+        return $query->where('fip','<=',$fip)->get();
     }
 }
