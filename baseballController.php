@@ -18,7 +18,8 @@ class baseballController extends Controller
       $pitching_stats=new PitchingStats;  
       // $items=$pitching_stats->get();
       // top 10 player
-      $items=$pitching_stats->orderby('fip')->take(10)->get();
+      // $items=$pitching_stats->orderby('fip')->take(10)->get();
+      $items=PitchingStats::greatPlayer();
       return view('baseball',['items'=>$items]);
     }
 
