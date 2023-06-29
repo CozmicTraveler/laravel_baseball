@@ -10,9 +10,10 @@ use App\Scopes\ScopePitchingStats;
 class PitchingStats extends Model
 {
     use HasFactory;
-    //Input guard
-    protected $guarded=array('id');
-
+    // Input guard
+    protected $guarded=['id','name'];
+    // disable timestamps(created,updated)
+    public $timestamps=false;
     //Define validation rules
     public static $rules = array(
         'team'=>'required',
@@ -49,5 +50,8 @@ class PitchingStats extends Model
     }
     public function scopeInningLessThan($query,$n){
         return $query->where('ip','<=',$n);
+    }
+    public function scopeGreatPlayer($query){
+        return $query->where('fip','<=','3.00')->get();
     }
 }
