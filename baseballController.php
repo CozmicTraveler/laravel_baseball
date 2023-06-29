@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\PitchingStats;
+use App\Models\PitcherProfile;
 
 class baseballController extends Controller
 {
@@ -19,7 +20,8 @@ class baseballController extends Controller
       // $items=$pitching_stats->get();
       // top 10 player
       // $items=$pitching_stats->orderby('fip')->take(10)->get();
-      $items=PitchingStats::greatPlayer();
+      // $items=PitchingStats::greatPlayer();
+      $items=PitchingStats::selectFip(4.00);
       return view('baseball',['items'=>$items]);
     }
 
@@ -423,16 +425,30 @@ class baseballController extends Controller
   }
   
   public function joinProfileStats(){
-    $items=DB::table('pitching_stats')
-    // The join method create inner join
-    ->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
-    // ->select('pitching_stats.*','pitcher_profile.*')->get();
-    // Left hand pitcher only
-    ->select('pitching_stats.*','pitcher_profile.*')->where('pitch_rl','左')->get();
-    $count=DB::table('pitching_stats')
+    // $items=DB::table('pitching_stats')
+    // // The join method create inner join
+    // ->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    // // ->select('pitching_stats.*','pitcher_profile.*')->get();
+    // // Left hand pitcher only
+    // ->select('pitching_stats.*','pitcher_profile.*')->where('pitch_rl','左')->get();
+    
+    $count=PitchingStats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
     // count lert hand pitchers
-    ->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
-    ->select('pitching_stats.*','pitcher_profile.*')->where('pitch_rl','左')->count();
+    ->where('pitch_rl','左')->count();
+    
+    $pitch_stats=new PitchingStats;
+    $items=$pitch_stats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    ->where('pitcher_profile.pitch_rl','左')->get();
     return view('baseball_join',['items'=>$items,'count'=>$count]);
+  }
+  public function pitchingSearch(Request $request){
+    return view('pitching_search');
+  }
+  public function searchPitcher(Request $request){
+    $name=$request->name;
+    $pitch_stats=new PitchingStats;
+    $items=$pitch_stats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    ->where('pitcher_profile.name',$name)->get();
+    return view('baseball_join',['items'=>$items,'count'=>1]);
   }
 }
