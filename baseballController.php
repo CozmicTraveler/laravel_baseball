@@ -22,7 +22,13 @@ class baseballController extends Controller
       // $items=$pitching_stats->orderby('fip')->take(10)->get();
       // $items=PitchingStats::greatPlayer();
       $items=PitchingStats::selectFip(4.00);
-      return view('baseball',['items'=>$items]);
+      //An simplest example to use acssesor
+      $get_one=$pitching_stats::find(1);
+      // $name=$get_one->name;
+      //access team and name
+      $team_name=$get_one->team_name;
+      // $pitcherProfile=$get_one->profile()->get();
+      return view('baseball',['items'=>$items,'name'=>$team_name]);
     }
 
     public function add(Request $request){
@@ -432,13 +438,16 @@ class baseballController extends Controller
     // // Left hand pitcher only
     // ->select('pitching_stats.*','pitcher_profile.*')->where('pitch_rl','左')->get();
     
-    $count=PitchingStats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
-    // count lert hand pitchers
-    ->where('pitch_rl','左')->count();
-    
+    // $count=PitchingStats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    // // count lert hand pitchers
+    // ->where('pitch_rl','左')->count();
+    $pitch_profile=new PitcherProfile;
     $pitch_stats=new PitchingStats;
-    $items=$pitch_stats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
-    ->where('pitcher_profile.pitch_rl','左')->get();
+    $count=PitcherProfile::select()->join('pitching_stats','pitching_stats.name','=','pitcher_profile.name')->count();
+    // $pitch_stats=new PitchingStats;
+    // $items=$pitch_stats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
+    // ->where('pitcher_profile.pitch_rl','左')->get();
+    $items=$pitch_profile::select()->join('pitching_stats','pitching_stats.name','=','pitcher_profile.name')->get();
     return view('baseball_join',['items'=>$items,'count'=>$count]);
   }
   public function pitchingSearch(Request $request){
@@ -448,7 +457,7 @@ class baseballController extends Controller
     $name=$request->name;
     $pitch_stats=new PitchingStats;
     $items=$pitch_stats::select()->join('pitcher_profile','pitching_stats.name','=','pitcher_profile.name')
-    ->where('pitcher_profile.name',$name)->get();
+    ->where('pitcher_profile.name','like','%'. $name . '%')->get();
     return view('baseball_join',['items'=>$items,'count'=>1]);
   }
 }
